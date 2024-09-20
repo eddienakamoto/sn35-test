@@ -13,3 +13,6 @@ git+https://github.com/lukew3/mathgenerator.git
 flask
 datasets
 matplotlib
+accelerate
+peft
+bitsandbytes
