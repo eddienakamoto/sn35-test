@@ -53,7 +53,7 @@ def preprocess_function(examples):
 
     # Tokenize the entire conversation
     model_inputs = tokenizer(
-        formatted_prompt, truncation=True, max_length=512, padding="max_length", return_tensors="pt"
+        formatted_prompt, truncation=True, max_length=1, padding="max_length", return_tensors="pt"
     )
 
     # Use the same input tokens as labels for causal language modeling
