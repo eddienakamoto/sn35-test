@@ -68,9 +68,11 @@ def preprocess_function(examples):
     return model_inputs
 
 
-# Apply the preprocessing to the entire dataset
-train_dataset = train_dataset.map(preprocess_function, batched=True)
-eval_dataset = eval_dataset.map(preprocess_function, batched=True)
+# Apply the preprocessing to the entire dataset without using cache
+train_dataset = train_dataset.map(
+    preprocess_function, batched=True, load_from_cache_file=False)
+eval_dataset = eval_dataset.map(
+    preprocess_function, batched=True, load_from_cache_file=False)
 
 # 6. Define Training Arguments
 training_args = TrainingArguments(
