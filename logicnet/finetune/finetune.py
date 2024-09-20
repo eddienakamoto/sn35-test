@@ -64,7 +64,7 @@ def preprocess_function(examples):
 
     # Set labels (the model will predict the final assistant response)
     labels = tokenizer(
-        examples['final_answer'], truncation=True, max_length=512, padding="max_length")
+        examples['logic_answer'], truncation=True, max_length=512, padding="max_length")
     model_inputs["labels"] = labels["input_ids"]
 
     return model_inputs
