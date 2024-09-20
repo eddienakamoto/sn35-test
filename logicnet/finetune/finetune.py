@@ -42,27 +42,30 @@ data_collator = DataCollatorForLanguageModeling(
 
 
 def preprocess_function(examples):
-    inputs = ""
+    # Constructing the conversation format
+    conversation = [
+        {"role": "user", "content": examples['logic_question']},
+        {"role": "assistant", "content": examples['logic_reasoning']},
+        {
+            "role": "user",
+            "content": "Give me the final short answer as a sentence. Don't reasoning anymore, just say the final answer in math latex."
+        },
+        {"role": "assistant", "content": examples['final_answer']}
+    ]
 
-    # Process the conversation field properly
-    for conversation in examples["conversation"]:
-        if isinstance(conversation, dict):
-            if conversation["role"] == "user":
-                inputs += "<|user|> " + conversation["content"] + " "
-            elif conversation["role"] == "assistant":
-                inputs += "<|assistant|> " + conversation["content"] + " "
+    # Combine the conversation into a single string
+    conversation_str = ""
+    for message in conversation:
+        conversation_str += f"<|{message['role']}|> {message['content']} "
 
-    # Tokenize the input and ensure the attention mask is included
-    model_inputs = tokenizer(inputs, truncation=True, max_length=702,
-                             padding="max_length", return_attention_mask=True)
+    # Tokenize the entire conversation
+    model_inputs = tokenizer(
+        conversation_str, truncation=True, max_length=512, padding="max_length")
 
-    # Tokenize the expected response (labels)
-    labels = tokenizer(examples['response'], truncation=True,
-                       max_length=702, padding="max_length", return_attention_mask=True)
-
+    # Set labels (the model will predict the final assistant response)
+    labels = tokenizer(
+        examples['final_answer'], truncation=True, max_length=512, padding="max_length")
     model_inputs["labels"] = labels["input_ids"]
-    # Ensure attention_mask is correctly returned
-    model_inputs["attention_mask"] = model_inputs["attention_mask"]
 
     return model_inputs
 
