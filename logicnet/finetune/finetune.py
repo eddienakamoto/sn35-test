@@ -60,11 +60,11 @@ def preprocess_function(examples):
 
     # Tokenize the entire conversation
     model_inputs = tokenizer(
-        conversation_str, truncation=True, max_length=512, padding="max_length")
+        conversation_str, truncation=True, max_length=351, padding="max_length")
 
     # Set labels (the model will predict the final assistant response)
     labels = tokenizer(
-        examples['logic_answer'], truncation=True, max_length=512, padding="max_length")
+        examples['logic_answer'], truncation=True, max_length=351, padding="max_length")
     model_inputs["labels"] = labels["input_ids"]
 
     return model_inputs
