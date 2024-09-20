@@ -34,7 +34,8 @@ model.resize_token_embeddings(len(tokenizer))
 # Since this is a Causal Language Model, MLM (Masked Language Modeling) should be False
 data_collator = DataCollatorForLanguageModeling(
     tokenizer=tokenizer,
-    mlm=False
+    mlm=False,
+    padding=True
 )
 
 # 5. Preprocess the Data
