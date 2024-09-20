@@ -76,6 +76,7 @@ eval_dataset = eval_dataset.map(
 
 # 6. Define Training Arguments
 training_args = TrainingArguments(
+    fp16=True,
     output_dir="./qwen2-finetuned",  # Directory to save the model
     overwrite_output_dir=True,
     evaluation_strategy="steps",
