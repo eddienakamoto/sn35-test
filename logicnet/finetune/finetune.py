@@ -1,10 +1,9 @@
 from transformers import AutoModelForCausalLM, AutoTokenizer, Trainer, TrainingArguments
-from datasets import load_dataset, DatasetDict
+from datasets import load_dataset
 from transformers import DataCollatorForLanguageModeling
 import json
 
 # 1. Load the Dataset
-# Make sure the file is structured properly, as shown above
 dataset = load_dataset(
     'json',
     data_files={
@@ -38,43 +37,47 @@ data_collator = DataCollatorForLanguageModeling(
 )
 
 # 5. Preprocess the Data
-# We need to tokenize the conversation history and the expected response
 
 
 def preprocess_function(examples):
-    # Constructing the conversation format
     conversation = [
         {"role": "user", "content": examples['logic_question']},
         {"role": "assistant", "content": examples['logic_reasoning']},
         {
             "role": "user",
-            "content": "Give me the final short answer as a sentence. Don't reasoning anymore, just say the final answer in math latex."
+            "content": "Give me the final short answer as a sentence. Don't reason anymore, just say the final answer in math latex."
         },
         {"role": "assistant", "content": examples['logic_answer']}
     ]
 
-    # Combine the conversation into a single string
+    # Combine the conversation into a single string with role markers
     conversation_str = ""
     for message in conversation:
         conversation_str += f"<|{message['role']}|> {message['content']} "
 
     # Tokenize the entire conversation
     model_inputs = tokenizer(
-        conversation_str, truncation=True, max_length=351, padding="max_length")
+        conversation_str, truncation=True, max_length=351, padding="max_length", return_tensors="pt"
+    )
 
-    # Set labels (the model will predict the final assistant response)
+    # Tokenize the final assistant response (which we want the model to predict)
     labels = tokenizer(
-        examples['logic_answer'], truncation=True, max_length=351, padding="max_length")
+        examples['logic_answer'], truncation=True, max_length=351, padding="max_length", return_tensors="pt"
+    )
+
+    # Assign the labels to the model inputs
     model_inputs["labels"] = labels["input_ids"]
 
     return model_inputs
 
 
-# Apply the preprocessing to the entire dataset without using cache
+# Apply the preprocessing to the dataset
 train_dataset = train_dataset.map(
-    preprocess_function, batched=True, load_from_cache_file=False)
+    preprocess_function, batched=True, load_from_cache_file=False
+)
 eval_dataset = eval_dataset.map(
-    preprocess_function, batched=True, load_from_cache_file=False)
+    preprocess_function, batched=True, load_from_cache_file=False
+)
 
 # 6. Define Training Arguments
 training_args = TrainingArguments(
