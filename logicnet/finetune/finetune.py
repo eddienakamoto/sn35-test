@@ -50,7 +50,7 @@ def preprocess_function(examples):
             "role": "user",
             "content": "Give me the final short answer as a sentence. Don't reasoning anymore, just say the final answer in math latex."
         },
-        {"role": "assistant", "content": examples['final_answer']}
+        {"role": "assistant", "content": examples['logic_answer']}
     ]
 
     # Combine the conversation into a single string
