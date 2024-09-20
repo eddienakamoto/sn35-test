@@ -10,7 +10,7 @@ datasets:
     type: alpaca
 dataset_prepared_path:
 val_set_size: 0.05
-output_dir: ./outputs/out
+output_dir: ~/model
 
 sequence_len: 2048
 sample_packing: true
