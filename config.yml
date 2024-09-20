@@ -9,8 +9,8 @@ datasets:
   - path: ../sn35-test/data/output.jsonl
     type: pygmalion
     conversation:
-    field_human: user
-    field_model: assistant
+    field_user:
+    field_assistant:
 dataset_prepared_path:
 val_set_size: 0.05
 output_dir: ./outputs/out
