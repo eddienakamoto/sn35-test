@@ -7,8 +7,8 @@ strict: false
 
 datasets:
   - path: ../sn35-test/data/output.jsonl
-    type: sharegpt
-    conversation:
+    type: pygmalion
+    conversation: conversations
     field_human: user
     field_model: assistant
 dataset_prepared_path:
