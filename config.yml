@@ -7,10 +7,7 @@ strict: false
 
 datasets:
   - path: ../sn35-test/data/output.jsonl
-    type: pygmalion
-    conversation: conversations
-    field_human: user
-    field_model: assistant
+    type: alpaca
 dataset_prepared_path:
 val_set_size: 0.05
 output_dir: ./outputs/out
