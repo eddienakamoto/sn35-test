@@ -12,3 +12,4 @@ python-dotenv==1.0.1
 git+https://github.com/lukew3/mathgenerator.git
 flask
 datasets
+matplotlib
