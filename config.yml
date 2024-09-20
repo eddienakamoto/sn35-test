@@ -1,4 +1,4 @@
-base_model: Qwen/Qwen2-7B
+base_model: Qwen/Qwen2-7B-Instruct
 trust_remote_code: true
 
 load_in_8bit: false
@@ -7,7 +7,7 @@ strict: false
 
 datasets:
   - path: ../sn35-test/data/output.jsonl
-    type: alpaca
+    type: pygmalion
 dataset_prepared_path:
 val_set_size: 0.05
 output_dir: ./outputs/out
