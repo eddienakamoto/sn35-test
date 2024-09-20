@@ -40,32 +40,44 @@ data_collator = DataCollatorForLanguageModeling(
 
 
 def preprocess_function(examples):
+    logic_question = examples['logic_question']
+    logic_reasoning = examples['logic_reasoning']
+    logic_answer = examples['logic_answer']
+
+    # Construct the conversation format
     conversation = [
-        {"role": "user", "content": examples['logic_question']},
-        {"role": "assistant", "content": examples['logic_reasoning']},
+        {"role": "user", "content": logic_question},
+        {"role": "assistant", "content": logic_reasoning},
         {
             "role": "user",
             "content": "Give me the final short answer as a sentence. Don't reason anymore, just say the final answer in math latex."
         },
-        {"role": "assistant", "content": examples['logic_answer']}
+        {"role": "assistant", "content": logic_answer}
     ]
 
-    # Combine the conversation into a single string with role markers
+    # Combine the conversation into a single string
     conversation_str = ""
     for message in conversation:
         conversation_str += f"<|{message['role']}|> {message['content']} "
 
     # Tokenize the entire conversation
     model_inputs = tokenizer(
-        conversation_str, truncation=True, max_length=351, padding="max_length", return_tensors="pt"
+        conversation_str, truncation=True, max_length=351, padding="max_length"
     )
 
-    # Tokenize the final assistant response (which we want the model to predict)
+    # Debug: Check the length and content of tokenized inputs
+    print(f"Tokenized input_ids length: {len(model_inputs['input_ids'])}")
+    print(f"Tokenized input_ids: {model_inputs['input_ids']}")
+
+    # Tokenize the expected response (label)
     labels = tokenizer(
-        examples['logic_answer'], truncation=True, max_length=351, padding="max_length", return_tensors="pt"
+        logic_answer, truncation=True, max_length=351, padding="max_length"
     )
 
-    # Assign the labels to the model inputs
+    # Debug: Check the length and content of tokenized labels
+    print(f"Tokenized labels length: {len(labels['input_ids'])}")
+    print(f"Tokenized labels: {labels['input_ids']}")
+
     model_inputs["labels"] = labels["input_ids"]
 
     return model_inputs
