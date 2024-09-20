@@ -34,8 +34,7 @@ model.resize_token_embeddings(len(tokenizer))
 # Since this is a Causal Language Model, MLM (Masked Language Modeling) should be False
 data_collator = DataCollatorForLanguageModeling(
     tokenizer=tokenizer,
-    mlm=False,
-    padding=True
+    mlm=False
 )
 
 # 5. Preprocess the Data
@@ -86,9 +85,9 @@ training_args = TrainingArguments(
     save_steps=500,
     eval_steps=500,
     logging_steps=100,
-    per_device_train_batch_size=1,  # Adjust based on your hardware
-    per_device_eval_batch_size=1,
-    gradient_accumulation_steps=4,  # Adjust to manage memory with smaller batch sizes
+    per_device_train_batch_size=2,  # Adjust based on your hardware
+    per_device_eval_batch_size=2,
+    gradient_accumulation_steps=8,  # Adjust to manage memory with smaller batch sizes
     num_train_epochs=3,  # Number of epochs for fine-tuning
     fp16=True,  # Enable mixed precision training for faster training and less memory usage
     learning_rate=5e-5,  # Adjust the learning rate as needed
