@@ -62,7 +62,7 @@ def preprocess_function(examples):
 
     # Tokenize the expected response (label)
     labels = tokenizer(
-        examples['response'], truncation=True, max_length=512, padding="max_length")
+        examples['response'], truncation=True, max_length=4000, padding="max_length")
     model_inputs["labels"] = labels["input_ids"]
 
     return model_inputs
